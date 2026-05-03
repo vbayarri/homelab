@@ -1,6 +1,6 @@
 ---
 - name: Setup Uptime Kuma en Alpine LXC
-  hosts: lxc-services2
+  hosts: uptimekuma
   tasks:
     - name: Instalar paquetes base
       community.general.apk:
