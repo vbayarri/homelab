@@ -1,18 +1,16 @@
 terraform {
   required_providers {
     proxmox = {
-      source  = "bpg/proxmox"
-      version = "0.86.0" # x-release-please-version
+      source  = "telmate/proxmox"
+      version = "3.0.2-rc07"
     }
   }
 }
 
 provider "proxmox" {
-  endpoint  = var.virtual_environment_endpoint
-  api_token = var.virtual_environment_token
-  insecure  = true
-  ssh {
-    agent    = true
-    username = "terraform"
-  }
+  pm_api_url          = var.virtual_environment_endpoint
+  pm_api_token_id     = var.proxmox_api_token_id
+  pm_api_token_secret = var.proxmox_api_token_secret
+  pm_tls_insecure     = true
+  pm_debug            = true
 }

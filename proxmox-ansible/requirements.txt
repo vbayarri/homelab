@@ -1,0 +1,3 @@
+proxmoxer==2.3.0
+requests==2.33.1
+ansible==13.6.0

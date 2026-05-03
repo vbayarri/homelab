@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+.terraform/
+*.tfstate*
+*.tfvars
+proxmox-ansible/inventory.yml

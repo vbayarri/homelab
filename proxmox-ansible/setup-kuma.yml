@@ -1,0 +1,35 @@
+---
+- name: Setup Uptime Kuma en Alpine LXC
+  hosts: lxc-services
+  tasks:
+    - name: Instalar paquetes base
+      community.general.apk:
+        name: openssh,docker,fuse-overlayfs
+        state: latest
+        update_cache: yes
+
+    - name: Configurar SSH (Root Login)
+      ansible.builtin.lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^#?PermitRootLogin'
+        line: 'PermitRootLogin prohibit-password'
+
+    - name: Configurar Docker para LXC
+      ansible.builtin.copy:
+        dest: /etc/docker/daemon.json
+        content: '{"storage-driver": "fuse-overlayfs"}'
+
+    - name: Iniciar servicios
+      ansible.builtin.service:
+        name: "{{ item }}"
+        enabled: yes
+        state: started
+      loop: [sshd, docker]
+
+    - name: Lanzar Uptime Kuma
+      community.docker.docker_container:
+        name: uptime-kuma
+        image: louislam/uptime-kuma:1
+        state: started
+        restart_policy: always
+        published_ports: ["3001:3001"]
