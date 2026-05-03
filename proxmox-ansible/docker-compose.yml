@@ -1,0 +1,13 @@
+services:
+  ansible:
+    build: .
+    container_name: ansible_container
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    image: ansible
+    volumes:
+      - .:/ansible
+      - ~/.ssh:/root/.ssh:ro
+    working_dir: /ansible
+    entrypoint: ["/bin/sh", "-c"]
+    command: ["tail -f /dev/null"]

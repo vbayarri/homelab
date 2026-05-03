@@ -1,0 +1,28 @@
+# Usamos la versión estable de Python sobre Debian Slim
+FROM python:3.13-slim
+
+# 1. Instalamos dependencias del sistema
+# - openssh-client y sshpass: Vitales para la conexión con Proxmox
+# - curl: Útil para diagnósticos y APIs
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    curl \
+    openssh-client \
+    sshpass \
+    && rm -rf /var/lib/apt/lists/*
+
+# 2. Instalamos librerías de Python
+# Instalamos requests y proxmoxer antes de la colección para evitar errores de dependencias
+RUN pip install --no-cache-dir \
+    ansible \
+    requests \
+    proxmoxer
+
+# 3. Instalamos la colección de Ansible
+# Lo hacemos al final para que, si cambias algo arriba, esta capa se cachee
+RUN ansible-galaxy collection install community.proxmox --upgrade
+
+# 4. Configuración del entorno
+WORKDIR /ansible
+
+# Opcional: Desactivar el host_key_checking vía variable de entorno global
+ENV ANSIBLE_HOST_KEY_CHECKING=False
