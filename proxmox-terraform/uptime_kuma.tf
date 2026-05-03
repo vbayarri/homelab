@@ -1,7 +1,7 @@
-resource "proxmox_lxc" "services_lxc" {
+resource "proxmox_lxc" "uptime_kuma" {
   target_node  = var.virtual_environment_node_name
   vmid         = 220
-  hostname     = "lxc-services2"
+  hostname     = "uptimekuma"
   tags         = "terraform"
   ostemplate   = var.alpine_template_name
   unprivileged = true
